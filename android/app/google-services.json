@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "888674978198",
+    "project_id": "inunity-4fb36",
+    "storage_bucket": "inunity-4fb36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888674978198:android:01687338f1768bd50535b7",
+        "android_client_info": {
+          "package_name": "com.example.inunity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "888674978198-r1it73nm2d1f2ar4frrpt7gthacf0eon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSUMBldBRGxxletyyLvFqHtoaYO8i-QgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "888674978198-r1it73nm2d1f2ar4frrpt7gthacf0eon.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inunity/presentation/add_note_screen/add_note_screen.dart';
@@ -23,10 +24,11 @@ class _HomePageState extends State<HomePage> {
           Icons.menu,
           color: Colors.black,
         ),
-        actions: const [
-          Icon(
-            Icons.person,
+        actions: [
+          IconButton(
+            onPressed: () => FirebaseAuth.instance.signOut(),
             color: Colors.black,
+            icon: Icon(Icons.logout),
           ),
         ],
         backgroundColor: Colors.white,
