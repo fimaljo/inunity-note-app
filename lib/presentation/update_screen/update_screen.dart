@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inunity/presentation/widgets/circle.dart';
 import 'package:inunity/presentation/widgets/select_color.dart';
 import 'package:inunity/presentation/widgets/text_titile.dart';
 import 'package:inunity/presentation/widgets/text_write_note.dart';
 
-class AddNoteScreen extends StatefulWidget {
-  const AddNoteScreen({Key? key}) : super(key: key);
+class UpdateNoteScreen extends StatefulWidget {
+  const UpdateNoteScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddNoteScreen> createState() => _AddNoteScreenState();
+  State<UpdateNoteScreen> createState() => _UpdateNoteScreenState();
 }
 
-class _AddNoteScreenState extends State<AddNoteScreen> {
+class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -25,6 +24,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       super.dispose();
     }
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -33,16 +33,32 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           color: Colors.black,
         ),
         title: Text(
-          "Add notes",
+          "Update notes",
           style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.black),
         ),
         centerTitle: true,
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                height: 20,
+                width: 40,
+                child: Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+          ),
           TextButton(
-              onPressed: () {},
-              child: Text(
-                "Save",
-              ))
+            onPressed: () {},
+            child: Text(
+              "Save",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
         ],
         backgroundColor: Colors.white,
       ),

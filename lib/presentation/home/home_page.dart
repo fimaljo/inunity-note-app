@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inunity/presentation/add_note_screen/add_note_screen.dart';
+import 'package:inunity/presentation/update_screen/update_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +17,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        leading: Icon(
+          Icons.menu,
+          color: Colors.black,
+        ),
+        actions: const [
+          Icon(
+            Icons.person,
+            color: Colors.black,
+          ),
+        ],
+        backgroundColor: Colors.white,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -129,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => AddNoteScreen(),
+                              builder: (context) => UpdateNoteScreen(),
                             ),
                           );
                         },

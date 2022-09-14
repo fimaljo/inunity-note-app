@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inunity/presentation/add_note_screen/add_note_screen.dart';
 import 'package:inunity/presentation/home/home_page.dart';
 import 'package:inunity/presentation/profile/profile_page.dart';
 
@@ -14,30 +15,11 @@ class MainPageState extends State<MainPage> {
     const HomePage(),
     const ProfilePage(),
   ];
-  // setBottomBarIndex(index) {
-  //   setState(() {
-  //     pageIndex = index;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
-        actions: const [
-          Icon(
-            Icons.person,
-            color: Colors.black,
-          ),
-        ],
-        backgroundColor: Colors.white,
-      ),
       body: pages[pageIndex],
       bottomNavigationBar: buildNavBar(size, context),
     );
@@ -59,7 +41,13 @@ class MainPageState extends State<MainPage> {
                 backgroundColor: Colors.black,
                 child: Icon(Icons.add),
                 elevation: 0.1,
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddNoteScreen(),
+                    ),
+                  );
+                }),
           ),
           Container(
             width: size.width,
@@ -70,8 +58,7 @@ class MainPageState extends State<MainPage> {
                 IconButton(
                   icon: Icon(
                     Icons.home,
-                    color:
-                        pageIndex == 0 ? Colors.orange : Colors.grey.shade400,
+                    color: pageIndex == 0 ? Colors.white : Colors.grey.shade400,
                   ),
                   onPressed: () {
                     setState(() {
@@ -86,8 +73,7 @@ class MainPageState extends State<MainPage> {
                 IconButton(
                   icon: Icon(
                     Icons.bookmark,
-                    color:
-                        pageIndex == 1 ? Colors.orange : Colors.grey.shade400,
+                    color: pageIndex == 1 ? Colors.white : Colors.grey.shade400,
                   ),
                   onPressed: () {
                     setState(() {
