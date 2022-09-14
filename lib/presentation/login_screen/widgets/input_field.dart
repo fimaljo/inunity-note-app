@@ -20,7 +20,10 @@ class RoundedInputField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
-          icon: Icon(icon),
+          icon: Icon(
+            icon,
+            color: Colors.black,
+          ),
           hintText: hintText,
           border: InputBorder.none,
         ),

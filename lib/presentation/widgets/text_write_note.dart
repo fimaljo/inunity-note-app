@@ -13,7 +13,7 @@ class TextWriteNote extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
       child: TextField(
         controller: controller,
-        style: GoogleFonts.getFont('Inter'),
+        style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black),
         maxLines: 10,
         decoration: InputDecoration(
           border: InputBorder.none,

@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inunity/infrastructure/firestore_methods/firestore_methods.dart';
 import 'package:inunity/presentation/add_note_screen/add_note_screen.dart';
 import 'package:inunity/presentation/update_screen/update_screen.dart';
+import 'package:inunity/presentation/widgets/shimmer.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,7 +21,10 @@ class _HomePageState extends State<HomePage> {
   );
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         leading: Icon(
@@ -109,100 +116,143 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: 350,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Transform.translate(
-                    offset: Offset(20, 0),
-                    child: Container(
-                      height: 90,
-                      width: 220,
-                      //margin: EdgeInsets.only(top: index == indexPage ? 0 : 5),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey[500]!,
-                            offset: const Offset(4, 4),
-                            blurRadius: 15,
-                            spreadRadius: 1,
-                          ),
-                          const BoxShadow(
-                            color: Colors.white,
-                            offset: Offset(-4, -4),
-                            blurRadius: 15,
-                            spreadRadius: 1,
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('notes').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.active &&
+                    snapshot.data != null) {
+                  if (snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("No Notes yet..."),
+                          Lottie.asset(
+                            "assets/anim/110457-notes-document.json",
+                            width: 200,
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(30),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("assets/images/note.png")),
                       ),
-                      child: InkWell(
+                    );
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => UpdateNoteScreen(),
+                              builder: (context) => UpdateScreen(
+                                snap: snapshot.data!.docs[index].data(),
+                              ),
                             ),
                           );
                         },
-                        child: Column(
-                          children: [
-                            Text(
-                              "Heading",
-                              style: GoogleFonts.ubuntu(
-                                  fontSize: 15, fontWeight: FontWeight.w800),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Text(
-                                "Capture what's on your mind & get a reminder later at the right place or time  You can also add voice memo & other featuresCapture what's on your mind & get a reminder later at the right place or time  You can also add voice memo & other features",
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.ubuntu(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 17,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Priority Color",
-                                    style: GoogleFonts.ubuntu(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  CircleAvatar(
-                                    radius: 7,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: NotesCard(
+                          snap: snapshot.data!.docs[index].data(),
                         ),
-                      ),
-                    ),
-                  ),
-                );
+                      );
+                    },
+                  );
+                }
+                return const ShimmerWidget(height: 90);
               },
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class NotesCard extends StatefulWidget {
+  final snap;
+  const NotesCard({Key? key, required this.snap}) : super(key: key);
+
+  @override
+  State<NotesCard> createState() => _NotesCardState();
+}
+
+class _NotesCardState extends State<NotesCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Transform.translate(
+        offset: Offset(20, 0),
+        child: Container(
+          height: 90,
+          width: 220,
+          //margin: EdgeInsets.only(top: index == indexPage ? 0 : 5),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey[500]!,
+                offset: const Offset(4, 4),
+                blurRadius: 15,
+                spreadRadius: 1,
+              ),
+              const BoxShadow(
+                color: Colors.white,
+                offset: Offset(-4, -4),
+                blurRadius: 15,
+                spreadRadius: 1,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(30),
+            image: DecorationImage(
+                fit: BoxFit.cover, image: AssetImage("assets/images/note.png")),
+          ),
+          child: Column(
+            children: [
+              Text(
+                widget.snap['noteTitile'],
+                style: GoogleFonts.ubuntu(
+                    fontSize: 15, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Text(
+                  widget.snap['noteDescription']!,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 17,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Row(
+                  children: [
+                    Text(
+                      "Priority Color",
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Color(widget.snap['priorityColor']!),
+                      radius: 7,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
